@@ -67,7 +67,7 @@ public class UserMealsUtil {
                 .collect(Collectors.groupingBy(userMeal -> userMeal.getDateTime().toLocalDate()))
                 .entrySet()
                 .stream()
-                .map(entry -> convertToUmweAndCheckTime(entry.getValue(), startTime, endTime, caloriesPerDay))
+                .map(entry -> convertToUmweAndCheckTime(entry.getValue(), startTime, endTime, isExceeded(entry.getValue(), caloriesPerDay)))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
