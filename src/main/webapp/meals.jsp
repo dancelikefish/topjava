@@ -17,28 +17,19 @@
     </tr>
     <c:forEach var="mealTo" items="${mealsWithExcess}">
         <jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo"/>
-            <c:choose>
-            <c:when test="${mealTo.excess == true}">
-                <tr style="color:red">
-                <td><%=mealTo.getDescription()%></td>
-                <td><%=mealTo.getCalories()%></td>
-                <td><%=HtmlUtil.formatDate(mealTo.getDateTime())%></td>
-                    <td><a href="meals?action=update&id=<c:out value="${mealTo.id}"/>">Update</a></td>
-                    <td><a href="meals?action=delete&id=<c:out value="${mealTo.id}"/>">Delete</a></td>
-                </tr>
-            </c:when>
-            <c:otherwise>
-                <tr style="color:green">
-                <td><%=mealTo.getDescription()%></td>
-                <td><%=mealTo.getCalories()%></td>
-                <td><%=HtmlUtil.formatDate(mealTo.getDateTime())%></td>
-                    <td><a href="meals?action=update&id=<c:out value="${mealTo.id}"/>">Update</a></td>
-                    <td><a href="meals?action=delete&id=<c:out value="${mealTo.id}"/>">Delete</a></td>
-                </tr>
-            </c:otherwise>
-            </c:choose>
+        <c:set var="redColor" value="<tr style=\"color:red\">"/>
+        <c:set var="greenColor" value="<tr style=\"color:green\">"/>
+
+        ${mealTo.excess == true ? redColor : greenColor}
+        <td>${mealTo.description}</td>
+        <td>${mealTo.calories}</td>
+        <td><%=HtmlUtil.formatDate(mealTo.getDateTime())%></td>
+        <td><a href="meals?action=update&id=<c:out value="${mealTo.id}"/>">Update</a></td>
+        <td><a href="meals?action=delete&id=<c:out value="${mealTo.id}"/>">Delete</a></td>
+        </tr>
     </c:forEach>
 </table>
 <p><a href="meals?action=add">Add Meal</a></p>
+<p><a href="index.html">Home</a></p>
 </body>
 </html>

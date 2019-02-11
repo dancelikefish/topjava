@@ -2,8 +2,8 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.mealstorage.MapStorage;
-import ru.javawebinar.topjava.mealstorage.Storage;
+import ru.javawebinar.topjava.storage.MapMealStorage;
+import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.HtmlUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -14,23 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
-    private static final Storage storage = new MapStorage();
+    private Storage storage;
 
-    static {
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 2500));
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 500));
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 500));
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак", 2500));
-        storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 29, 10, 0), "Завтрак", 1500));
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        storage = new MapMealStorage();
     }
 
     @Override
@@ -48,7 +42,7 @@ public class MealServlet extends HttpServlet {
                     return;
 
                 case "add":
-                    req.setAttribute("meal", Meal.EMPTY);
+                    req.setAttribute("meal", MealsUtil.EMPTY);
                     req.getRequestDispatcher("/editMeal.jsp").forward(req, resp);
                     return;
 
@@ -60,7 +54,7 @@ public class MealServlet extends HttpServlet {
             }
         }
         req.setAttribute("mealsWithExcess", MealsUtil.getFilteredWithExcessInOnePass2(
-                storage.getAll(), LocalTime.of(0, 0), LocalTime.of(23, 0), 2000));
+                storage.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
         log.debug("send forward() to meals.jsp");
         req.getRequestDispatcher("/meals.jsp").forward(req, resp);
     }
@@ -75,14 +69,12 @@ public class MealServlet extends HttpServlet {
 
         String stringId = req.getParameter("id");
         if (stringId.equals("0")) {
-            storage.save(new Meal(MapStorage.idCounter.incrementAndGet(), dateTime, description, calories));
-            resp.sendRedirect("meals");
-        }
-        if (!stringId.equals("0")) {
+            storage.save(new Meal(MapMealStorage.ID_COUNTER.incrementAndGet(), dateTime, description, calories));
+        } else {
             int id = Integer.parseInt(req.getParameter("id"));
             storage.update(new Meal(id, dateTime, description, calories));
-            resp.sendRedirect("meals");
         }
+        resp.sendRedirect("meals");
     }
 }
 
