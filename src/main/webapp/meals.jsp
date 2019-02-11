@@ -12,6 +12,8 @@
         <th>Description</th>
         <th>Calories</th>
         <th>Meal time</th>
+        <th>Update</th>
+        <th>Delete</th>
     </tr>
     <c:forEach var="mealTo" items="${mealsWithExcess}">
         <jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo"/>
@@ -21,6 +23,8 @@
                 <td><%=mealTo.getDescription()%></td>
                 <td><%=mealTo.getCalories()%></td>
                 <td><%=HtmlUtil.formatDate(mealTo.getDateTime())%></td>
+                    <td><a href="meals?action=update&id=<c:out value="${mealTo.id}"/>">Update</a></td>
+                    <td><a href="meals?action=delete&id=<c:out value="${mealTo.id}"/>">Delete</a></td>
                 </tr>
             </c:when>
             <c:otherwise>
@@ -28,10 +32,13 @@
                 <td><%=mealTo.getDescription()%></td>
                 <td><%=mealTo.getCalories()%></td>
                 <td><%=HtmlUtil.formatDate(mealTo.getDateTime())%></td>
+                    <td><a href="meals?action=update&id=<c:out value="${mealTo.id}"/>">Update</a></td>
+                    <td><a href="meals?action=delete&id=<c:out value="${mealTo.id}"/>">Delete</a></td>
                 </tr>
             </c:otherwise>
             </c:choose>
     </c:forEach>
 </table>
+<p><a href="meals?action=add">Add Meal</a></p>
 </body>
 </html>
