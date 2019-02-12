@@ -10,7 +10,8 @@
 <form method="POST" action='meals' name="AddMeal">
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <input type="hidden" name="id" value="${meal.id}">
-        Date : <input type="text" name="dateTime" value="<c:out value="<%=HtmlUtil.formatDate(meal.getDateTime())%>" />" placeholder="dd.MM.yyyy HH:mm"/> <br/>
+        Date : <input type="text" name="dateTime" value="<c:out value="<%=HtmlUtil.formatDate(meal.getDateTime())%>" />"
+                      placeholder="dd.MM.yyyy HH:mm"/> <br/>
         Description : <input type="text" name="description" value="<c:out value="${meal.description}" />"/> <br/>
         Calories : <input type="text" name="calories" value="<c:out value="${meal.calories}" />"/> <br/>
     <input type="submit" value="Submit"/>

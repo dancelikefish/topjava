@@ -25,6 +25,9 @@ public class MealServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         storage = new MapMealStorage();
+        for (Meal meal : MealsUtil.getMeals()) {
+            storage.save(meal);
+        }
     }
 
     @Override

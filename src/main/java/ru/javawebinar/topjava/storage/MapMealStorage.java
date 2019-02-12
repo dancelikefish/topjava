@@ -15,22 +15,22 @@ public class MapMealStorage implements Storage {
 
     @Override
     public Meal save(Meal meal) {
-        if (!meals.containsKey(meal.getId())) {
-            int id = ID_COUNTER.incrementAndGet();
-            return meals.put(id, new Meal(id, meal.getDateTime(), meal.getDescription(), meal.getCalories()));
-        } else return null;
+        int id = ID_COUNTER.incrementAndGet();
+        return meals.putIfAbsent(id, new Meal(id, meal.getDateTime(), meal.getDescription(), meal.getCalories()));
     }
 
     @Override
     public Meal get(int id) {
-        return meals.getOrDefault(id, null);
+        if (meals.containsKey(id)) {
+            return meals.get(id);
+        }
+        return null;
     }
 
     @Override
     public Meal update(Meal meal) {
         if (meals.containsKey(meal.getId())) {
-            meals.remove(meal.getId());
-            return meals.put(meal.getId()
+            return meals.replace(meal.getId()
                     , new Meal(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories()));
         } else return null;
     }
