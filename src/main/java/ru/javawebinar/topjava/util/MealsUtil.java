@@ -2,8 +2,6 @@ package ru.javawebinar.topjava.util;
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.storage.MapMealStorage;
-import ru.javawebinar.topjava.storage.Storage;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,7 +19,6 @@ import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
     public static final Meal EMPTY = new Meal(0, null, "", 0);
-    public static final Storage storage = new MapMealStorage();
     public static void main(String[] args) {
         System.out.println(getFilteredWithExcessInOnePass2(getMeals(), LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
