@@ -23,7 +23,6 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        super.init();
         storage = new MapMealStorage();
         for (Meal meal : MealsUtil.getMeals()) {
             storage.save(meal);
@@ -56,7 +55,7 @@ public class MealServlet extends HttpServlet {
                     return;
             }
         }
-        req.setAttribute("mealsWithExcess", MealsUtil.getFilteredWithExcessInOnePass2(
+        req.setAttribute("mealsWithExcess", MealsUtil.getFilteredWithExcess(
                 storage.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
         log.debug("send forward() to meals.jsp");
         req.getRequestDispatcher("/meals.jsp").forward(req, resp);
@@ -72,7 +71,7 @@ public class MealServlet extends HttpServlet {
 
         String stringId = req.getParameter("id");
         if (stringId.equals("0")) {
-            storage.save(new Meal(MapMealStorage.ID_COUNTER.incrementAndGet(), dateTime, description, calories));
+            storage.save(new Meal(dateTime, description, calories));
         } else {
             int id = Integer.parseInt(req.getParameter("id"));
             storage.update(new Meal(id, dateTime, description, calories));

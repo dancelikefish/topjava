@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MapMealStorage implements Storage {
 
     private static final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
-    public static final AtomicInteger ID_COUNTER = new AtomicInteger(0);
+    private static final AtomicInteger ID_COUNTER = new AtomicInteger(0);
 
     @Override
     public Meal save(Meal meal) {
@@ -21,18 +21,13 @@ public class MapMealStorage implements Storage {
 
     @Override
     public Meal get(int id) {
-        if (meals.containsKey(id)) {
-            return meals.get(id);
-        }
-        return null;
+        return meals.get(id);
     }
 
     @Override
     public Meal update(Meal meal) {
-        if (meals.containsKey(meal.getId())) {
-            return meals.replace(meal.getId()
+        return meals.replace(meal.getId()
                     , new Meal(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories()));
-        } else return null;
     }
 
     @Override
