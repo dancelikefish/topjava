@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.model;
 
+import java.util.Objects;
+
 public abstract class AbstractBaseEntity {
     protected Integer id;
 
@@ -17,6 +19,19 @@ public abstract class AbstractBaseEntity {
 
     public boolean isNew() {
         return this.id == null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractBaseEntity)) return false;
+        AbstractBaseEntity that = (AbstractBaseEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
