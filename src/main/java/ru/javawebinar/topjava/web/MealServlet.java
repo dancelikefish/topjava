@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -44,7 +43,11 @@ public class MealServlet extends HttpServlet {
                 Integer.parseInt(request.getParameter("calories")));
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        mealRestController.save(meal);
+        if (meal.isNew()) {
+            mealRestController.save(meal);
+        } else {
+            mealRestController.update(meal, getId(request));
+        }
         response.sendRedirect("meals");
     }
 
@@ -70,11 +73,18 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                LocalDate fromDate = DateTimeUtil.toLocalDateOrMin(request.getParameter("fromDate"));
-                LocalDate toDate = DateTimeUtil.toLocalDateOrMax(request.getParameter("toDate"));
-                LocalTime fromTime = DateTimeUtil.toLocalTimeOrMin(request.getParameter("fromTime"));
-                LocalTime toTime = DateTimeUtil.toLocalTimeOrMax(request.getParameter("toTime"));
-                request.setAttribute("meals", mealRestController.getAll(fromDate, toDate, fromTime, toTime));
+                String fromDateStr = request.getParameter("fromDate");
+                String toDateStr = request.getParameter("toDate");
+                String fromTimeStr = request.getParameter("fromTime");
+                String toTimeStr = request.getParameter("toTime");
+
+                LocalDate startDate = fromDateStr == null || fromDateStr.isEmpty() ? null : LocalDate.parse(fromDateStr);
+                LocalDate endDate = toDateStr == null || toDateStr.isEmpty() ? null : LocalDate.parse(toDateStr);
+                LocalTime startTime = fromTimeStr == null || fromTimeStr.isEmpty() ? null : LocalTime.parse(fromTimeStr);
+                LocalTime endTime = toTimeStr == null || toTimeStr.isEmpty() ? null : LocalTime.parse(toTimeStr);
+
+                request.setAttribute("meals", mealRestController
+                        .getAll(startDate, endDate, startTime, endTime));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

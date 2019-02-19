@@ -29,26 +29,25 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal save(Integer userId, Meal meal) {
         log.info("save meal {}", meal.getId());
-        if (meal.isNew() && mealRepository.get(userId) == null) {
-            Map<Integer, Meal> userMealMap = new HashMap<>();
-            meal.setId(counter.incrementAndGet());
-            userMealMap.put(meal.getId(), meal);
-            return mealRepository.put(userId, userMealMap) == null ? null : meal;
-        } else if (meal.isNew() && mealRepository.get(userId) != null) {
-            Map<Integer, Meal> userMealMap = mealRepository.get(userId);
-            meal.setId(counter.incrementAndGet());
-            userMealMap.put(meal.getId(), meal);
-            return mealRepository.computeIfPresent(userId, (mealId, mealMap) -> userMealMap) == null ? null : meal;
-        } else {
-            return mealRepository.get(userId).computeIfPresent(meal.getId(), (mealId, oldMeal) -> meal);
+        mealRepository.computeIfAbsent(userId, key -> new HashMap<>());
+        Map<Integer, Meal> gottenMap = mealRepository.get(userId);
+        if (gottenMap != null) {
+            if (meal.isNew()) {
+                meal.setId(counter.incrementAndGet());
+                return gottenMap.put(meal.getId(), meal);
+            } else {
+                return gottenMap.computeIfPresent(meal.getId(), (mealId, oldMeal) -> meal);
+            }
         }
+        return null;
     }
 
     @Override
     public boolean delete(Integer userId, int id) {
         log.info("delete meal {}", id);
-        if (mealRepository.get(userId).get(id) != null) {
-            return mealRepository.get(userId).remove(id) != null;
+        Map<Integer, Meal> gottenMap = mealRepository.get(userId);
+        if (gottenMap.get(id) != null) {
+            return gottenMap.remove(id) != null;
         }
         return false;
     }
@@ -56,19 +55,35 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(Integer userId, int id) {
         log.info("get meal {}", id);
-        return mealRepository.get(userId).get(id);
+        Map<Integer, Meal> gottenMap = mealRepository.get(userId);
+        if (gottenMap != null) {
+            Meal gottenMeal = gottenMap.get(id);
+            if (gottenMeal != null) {
+                return gottenMeal;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Meal> getAll(Integer userId) {
+        log.info("getAll user's meals {}", userId);
+        return new ArrayList<>(mealRepository.get(userId).values())
+                .stream()
+                .sorted(Comparator.comparing(Meal::getDateTime)
+                        .reversed())
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Meal> getAll(Integer userId, LocalDate startDate, LocalDate endDate) {
-        log.info("getAll user's meals {}", userId);
+        log.info("getAll user's meals with filter {}", userId);
         return new ArrayList<>(mealRepository.get(userId).values())
                 .stream()
                 .filter(meal -> DateTimeUtil.isBetweenDateOrTime(meal.getDate(), startDate, endDate))
                 .sorted(Comparator.comparing(Meal::getDateTime)
                         .reversed())
                 .collect(Collectors.toList());
-
     }
 }
 
