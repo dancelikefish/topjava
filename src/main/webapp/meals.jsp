@@ -20,7 +20,24 @@
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
-    <a href="meals?action=create">Add Meal</a>
+    <form method="get" action="meals">
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+        <tr>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>From Time</th>
+            <th>To Time</th>
+        </tr>
+        </thead>
+        <td><input type="date" name="fromDate"></td>
+        <td><input type="date" name="toDate"></td>
+        <td><input type="time" name="fromTime"></td>
+        <td><input type="time" name="toTime"></td>
+    </table>
+        <button onclick="window.history.back()" type="button">Cancel</button>
+        <button type="submit">Apply filter</button>
+    </form>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -48,6 +65,7 @@
             </tr>
         </c:forEach>
     </table>
+    <a href="meals?action=create">Add Meal</a>
 </section>
 </body>
 </html>
