@@ -54,17 +54,17 @@ public class MealRestController {
     public List<MealTo> getAll() {
         log.info("Get all");
         int userId = SecurityUtil.getAuthUserId();
-        return MealsUtil.getWithExcess(mealService.getAll(userId, LocalDate.MIN, LocalDate.MAX), SecurityUtil.authUserCaloriesPerDay());
+        return MealsUtil.getWithExcess(mealService.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
     }
 
-    public List<MealTo> getAll(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public List<MealTo> getBetween(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("Get all with filter");
         int userId = SecurityUtil.getAuthUserId();
         startDate = startDate == null ? LocalDate.MIN : startDate;
         endDate = endDate == null ? LocalDate.MAX : endDate;
         startTime = startTime == null ? LocalTime.MIN : startTime;
         endTime = endTime == null ? LocalTime.MAX : endTime;
-        return MealsUtil.getFilteredWithExcess(mealService.getAll(userId, startDate, endDate)
+        return MealsUtil.getFilteredWithExcess(mealService.getBetween(userId, startDate, endDate)
                 , SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
 }

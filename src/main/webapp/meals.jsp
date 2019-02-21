@@ -36,6 +36,7 @@
         <td><input type="time" name="toTime"></td>
     </table>
         <button onclick="window.history.back()" type="button">Cancel</button>
+        <input type="hidden" name="action" value="filter">
         <button type="submit">Apply filter</button>
     </form>
     <hr/>

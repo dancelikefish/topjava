@@ -16,5 +16,7 @@ public interface MealService {
 
     void update(Integer userId, Meal meal);
 
-    List<Meal> getAll(Integer userId, LocalDate startDate, LocalDate endDate);
+    List<Meal> getAll(int userId);
+
+    List<Meal> getBetween(Integer userId, LocalDate startDate, LocalDate endDate);
 }
