@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.UserTestData.USER;
 
-@Repository
+@Repository("inMemoryUserRepo")
 public class InMemoryUserRepositoryImpl extends InMemoryBaseRepositoryImpl<User> implements UserRepository {
 
     public void init() {
