@@ -38,7 +38,7 @@ public class MealServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(MEAL_ID, USER_ID);
-        assertMatch(service.getAll(USER_ID), MEAL2, MEAL3);
+        assertMatch(service.getAll(USER_ID), MEAL3, MEAL2);
     }
 
     @Test(expected = NotFoundException.class)
@@ -54,12 +54,12 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void getNotFound() throws Exception {
-        service.get(1,1);
+        service.get(MEAL_ID, USER_ID + 10);
     }
 
     @Test
     public void update() throws Exception {
-        Meal updated = MEAL1;
+        Meal updated = new Meal(MEAL1.getId(), MEAL1.getDateTime(), MEAL1.getDescription(), MEAL1.getCalories());
         updated.setCalories(500);
         service.update(updated, USER_ID);
         assertMatch(service.get(updated.getId(), USER_ID), updated);
@@ -67,7 +67,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void updateNotFound() throws Exception {
-        Meal updated = MEAL4;
+        Meal updated = new Meal(MEAL4.getId(), MEAL4.getDateTime(), MEAL4.getDescription(), MEAL4.getCalories());
         updated.setCalories(500);
         service.update(updated, USER_ID);
         assertMatch(service.get(updated.getId(), USER_ID), updated);
@@ -76,15 +76,15 @@ public class MealServiceTest {
     @Test
     public void getAll() throws Exception {
         List<Meal> meals = service.getAll(USER_ID);
-        assertMatch(meals, MEAL1, MEAL2, MEAL3);
+        assertMatch(meals, MEAL3, MEAL2, MEAL1);
     }
 
     @Test
     public void getBetweenDateTimes() {
         List<Meal> mealsBetween = service.getBetweenDateTimes(
-                LocalDateTime.of(2011,5,5,0,0,0)
-                , LocalDateTime.of(2013,5,5,0,0,0), USER_ID);
+                LocalDateTime.of(2011, 5, 5, 0, 0, 0)
+                , LocalDateTime.of(2013, 5, 5, 0, 0, 0), USER_ID);
 
-        assertMatch(mealsBetween, MEAL1, MEAL2, MEAL3);
+        assertMatch(mealsBetween, MEAL3, MEAL2, MEAL1);
     }
 }
