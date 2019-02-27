@@ -18,7 +18,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
+        "classpath:spring/spring-commonconf.xml"
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
@@ -43,7 +43,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void deletedNotFound() throws Exception {
-        service.delete(1, 1);
+        service.delete(MEAL4.getId(), USER_ID);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void getNotFound() throws Exception {
-        service.get(MEAL_ID, USER_ID + 10);
+        service.get(MEAL4.getId(), USER_ID);
     }
 
     @Test

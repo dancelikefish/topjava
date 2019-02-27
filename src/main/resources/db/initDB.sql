@@ -41,7 +41,9 @@ create table meals
 alter table meals
   owner to "user";
 
-create unique index meals_datetime_uindex
-  on meals (datetime desc);
+create unique index meals_datetime_userid_uindex
+  on meals (userid asc, datetime desc);
+
+
 
 
