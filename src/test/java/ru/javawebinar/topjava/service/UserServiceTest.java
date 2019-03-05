@@ -1,7 +1,14 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,9 +20,11 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -33,8 +42,40 @@ public class UserServiceTest {
         SLF4JBridgeHandler.install();
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(MealServiceTest.class.getName());
+    private static final List<String> logInfo = new ArrayList<>();
+
+    private static void logInfo(Description description, String status, long nanos) {
+        String testName = description.getMethodName();
+        logInfo.add((String.format("Test %s %s, spent %d microseconds",
+                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos))));
+        logger.info((String.format("Test %s %s, spent %d microseconds",
+                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos))));
+    }
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void failed(long nanos, Throwable e, Description description) {
+            logInfo(description, "failed", nanos);
+        }
+
+        @Override
+        protected void finished(long nanos, Description description) {
+            logInfo(description, "finished", nanos);
+        }
+    };
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Autowired
     private UserService service;
+
+    @After
+    public void tearDown() throws Exception {
+        logInfo.forEach(logger::info);
+    }
 
     @Test
     public void create() throws Exception {
@@ -45,8 +86,9 @@ public class UserServiceTest {
         assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void duplicateMailCreate() throws Exception {
+        expectedException.expect(DataAccessException.class);
         service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
     }
 
@@ -56,8 +98,9 @@ public class UserServiceTest {
         assertMatch(service.getAll(), ADMIN);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deletedNotFound() throws Exception {
+        expectedException.expect(NotFoundException.class);
         service.delete(1);
     }
 
@@ -67,8 +110,9 @@ public class UserServiceTest {
         assertMatch(user, USER);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
+        expectedException.expect(NotFoundException.class);
         service.get(1);
     }
 
