@@ -42,7 +42,7 @@ public class UserServiceTest {
         SLF4JBridgeHandler.install();
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(MealServiceTest.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class.getName());
     private static final List<String> logInfo = new ArrayList<>();
 
     private static void logInfo(Description description, String status, long nanos) {
