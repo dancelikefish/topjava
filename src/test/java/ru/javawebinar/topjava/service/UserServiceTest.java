@@ -1,15 +1,7 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.After;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.Stopwatch;
-import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,11 +12,9 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -34,48 +24,10 @@ import static ru.javawebinar.topjava.UserTestData.*;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class UserServiceTest {
-
-    static {
-        // Only for postgres driver logging
-        // It uses java.util.logging and logged via jul-to-slf4j bridge
-        SLF4JBridgeHandler.install();
-    }
-
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class.getName());
-    private static final List<String> logInfo = new ArrayList<>();
-
-    private static void logInfo(Description description, String status, long nanos) {
-        String testName = description.getMethodName();
-        logInfo.add((String.format("Test %s %s, spent %d microseconds",
-                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos))));
-        logger.info((String.format("Test %s %s, spent %d microseconds",
-                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos))));
-    }
-
-    @Rule
-    public Stopwatch stopwatch = new Stopwatch() {
-        @Override
-        protected void failed(long nanos, Throwable e, Description description) {
-            logInfo(description, "failed", nanos);
-        }
-
-        @Override
-        protected void finished(long nanos, Description description) {
-            logInfo(description, "finished", nanos);
-        }
-    };
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+public class UserServiceTest extends ru.javawebinar.topjava.service.Test {
 
     @Autowired
     private UserService service;
-
-    @After
-    public void tearDown() throws Exception {
-        logInfo.forEach(logger::info);
-    }
 
     @Test
     public void create() throws Exception {
