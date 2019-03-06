@@ -1,7 +1,15 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -12,6 +20,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -24,6 +33,32 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest extends ru.javawebinar.topjava.service.Test {
+
+    static {
+        SLF4JBridgeHandler.install();
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class.getName());
+    private static final StringBuilder testStrsToSout = new StringBuilder();
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            String testName = description.getMethodName();
+            String testStr = (String.format("Test %s %s, spent %d microseconds", testName, "finished", TimeUnit.NANOSECONDS.toMillis(nanos)));
+            logger.info(testStr);
+            testStrsToSout.append(testStr).append("\n");
+        }
+    };
+
+    @AfterClass
+    public static void after() throws Exception {
+        logger.info("\n" + testStrsToSout.toString());
+    }
 
     @Autowired
     private MealService service;

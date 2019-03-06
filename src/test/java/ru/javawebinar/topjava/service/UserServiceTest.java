@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,7 +25,11 @@ import static ru.javawebinar.topjava.UserTestData.*;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class UserServiceTest extends ru.javawebinar.topjava.service.Test {
+public class UserServiceTest {
+
+    static {
+        SLF4JBridgeHandler.install();
+    }
 
     @Autowired
     private UserService service;
@@ -38,9 +43,8 @@ public class UserServiceTest extends ru.javawebinar.topjava.service.Test {
         assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
-    @Test
+    @Test(expected = DataAccessException.class)
     public void duplicateMailCreate() throws Exception {
-        expectedException.expect(DataAccessException.class);
         service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
     }
 
@@ -50,9 +54,8 @@ public class UserServiceTest extends ru.javawebinar.topjava.service.Test {
         assertMatch(service.getAll(), ADMIN);
     }
 
-    @Test
+    @Test(expected = NotFoundException.class)
     public void deletedNotFound() throws Exception {
-        expectedException.expect(NotFoundException.class);
         service.delete(1);
     }
 
@@ -62,9 +65,8 @@ public class UserServiceTest extends ru.javawebinar.topjava.service.Test {
         assertMatch(user, USER);
     }
 
-    @Test
+    @Test(expected = NotFoundException.class)
     public void getNotFound() throws Exception {
-        expectedException.expect(NotFoundException.class);
         service.get(1);
     }
 
