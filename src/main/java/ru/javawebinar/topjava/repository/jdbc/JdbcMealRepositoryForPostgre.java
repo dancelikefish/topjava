@@ -5,19 +5,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.Profiles;
-import ru.javawebinar.topjava.model.Meal;
+
+import java.time.LocalDateTime;
 
 @Repository
 @Profile(Profiles.POSTGRES_DB)
-public class JdbcMealRepositoryForPostgre extends JdbcMealRepository {
+public class JdbcMealRepositoryForPostgre extends JdbcMealRepository<LocalDateTime> {
 
     public JdbcMealRepositoryForPostgre(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected <T> T getDateTimeDependsOnImpl(Meal meal) {
-        return (T) meal.getDateTime();
+    protected LocalDateTime getDateTimeDependsOnImpl(LocalDateTime localDateTime) {
+        return localDateTime;
     }
 }

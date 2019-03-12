@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 
@@ -20,8 +21,7 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Query("DELETE FROM Meal m WHERE m.user.id=:userId AND m.id=:id")
     int deleteByIdAndId(@Param("id") int id, @Param("userId") int userId);
 
-    @Transactional
-    @Modifying
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     Meal save(Meal meal);
 
