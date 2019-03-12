@@ -26,4 +26,9 @@
         <url-pattern>/meals</url-pattern>
     </servlet-mapping>
 
+    <context-param>
+        <param-name>contextInitializerClasses</param-name>
+        <param-value>ru.javawebinar.topjava.web.ContextInitializer</param-value>
+    </context-param>
+
 </web-app>
