@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.repository.datajpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Transactional(readOnly = true)
 public class DataJpaMealRepositoryImpl implements MealRepository {
 
     private static final Sort SORT_DATE_TIME = new Sort(Sort.Direction.DESC, "dateTime");
@@ -25,7 +23,7 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
 
     @Override
-    @Transactional(propagation = Propagation.MANDATORY)
+    @Transactional
     public Meal save(Meal meal, int userId) {
         if (!meal.isNew() && get(meal.getId(), userId) == null) {
             return null;
@@ -36,7 +34,6 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    @Transactional(propagation = Propagation.MANDATORY)
     public boolean delete(int id, int userId) {
         return crudRepository.deleteByIdAndId(id, userId) != 0;
     }

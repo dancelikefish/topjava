@@ -21,7 +21,6 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
 
     @Override
-    @Transactional
     Meal save(Meal meal);
 
     @Query("SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
@@ -33,4 +32,9 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Query("SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate")
     List<Meal> findAllByIdAndDateTimeBetween(@Param("userId") Integer userId, @Param("startDate") LocalDateTime startDate
             , @Param("endDate") LocalDateTime endDate, Sort sort);
+
+    @Query("SELECT m FROM MEAL m JOIN FETCH m.user WHERE m.id=:id AND m.user=:userId")
+    Meal getWithUser(Integer id, Integer userId);
 }
+
+
