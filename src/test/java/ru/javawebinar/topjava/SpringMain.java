@@ -1,8 +1,6 @@
 package ru.javawebinar.topjava;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 
 import java.util.Arrays;
@@ -19,8 +17,7 @@ public class SpringMain {
             System.out.println();
 
             UserService userService = appCtx.getBean(UserService.class);
-            System.out.println(userService.create
-                    (new User(null,"asd", "asd,","asd", Role.ROLE_USER, Role.ROLE_ADMIN)));
+            System.out.println(userService.getByEmail("admin@gmail.com"));
 
         }
     }

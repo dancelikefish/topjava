@@ -11,29 +11,21 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <c:choose>
-        <c:when test="${param.action == 'create'}">
-            <h2><spring:message code="meal.add"/></h2>
-        </c:when>
-
-        <c:when test="${param.action != 'create'}">
-        <h2><spring:message code="meal.update"/></h2>
-        </c:when>
-    </c:choose>
+    <h2><spring:message code="${meal.isNew() ? 'meal.add' : 'meal.update'}"/></h2>
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <form method="post" action="meals/create">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
-            <dt>DateTime:</dt>
+            <dt><spring:message code="meal.date"/></dt>
             <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>
         </dl>
         <dl>
-            <dt>Description:</dt>
+            <dt><spring:message code="meal.description"/></dt>
             <dd><input type="text" value="${meal.description}" size=40 name="description" required></dd>
         </dl>
         <dl>
-            <dt>Calories:</dt>
+            <dt><spring:message code="app.save"/></dt>
             <dd><input type="number" value="${meal.calories}" name="calories" required></dd>
         </dl>
         <button type="submit"><spring:message code="app.save"/></button>
