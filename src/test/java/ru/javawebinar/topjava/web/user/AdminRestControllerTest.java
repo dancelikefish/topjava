@@ -19,7 +19,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 
 class AdminRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = AdminRestController.REST_URL + '/';
+    private static final String REST_URL = AdminRestController.REST_ADMIN_USERS + '/';
 
     @Test
     void testGet() throws Exception {
