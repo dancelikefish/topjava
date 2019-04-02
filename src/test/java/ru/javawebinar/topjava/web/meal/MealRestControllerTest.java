@@ -1,10 +1,12 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
@@ -23,6 +25,9 @@ import static ru.javawebinar.topjava.web.meal.MealRestController.REST_USER_MEALS
 class MealRestControllerTest extends AbstractControllerTest {
 
     public static final String REST_URL = REST_USER_MEALS + '/';
+
+    @Autowired
+    protected MealService mealService;
 
     @Test
     void testGetAll() throws Exception {
@@ -89,5 +94,19 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(MEAL_TO4, MEAL_TO1));
+    }
+
+    @Test
+    void testFilterWithNull() throws Exception {
+        mockMvc.perform(post(REST_URL + "filter")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("startDate", "")
+                .param("startTime", "")
+                .param("endDate", "")
+                .param("endTime", ""))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(contentJson(MEALS_TO));
     }
 }

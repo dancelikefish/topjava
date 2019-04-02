@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.util;
+package ru.javawebinar.topjava.util.formatters;
 
 import org.springframework.format.Formatter;
 import org.springframework.util.StringUtils;

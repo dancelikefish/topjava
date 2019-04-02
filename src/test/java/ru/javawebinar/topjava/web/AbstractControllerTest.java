@@ -12,7 +12,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.javawebinar.topjava.AllActiveProfileResolver;
 import ru.javawebinar.topjava.repository.JpaUtil;
-import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -35,19 +34,10 @@ abstract public class AbstractControllerTest {
         CHARACTER_ENCODING_FILTER.setForceEncoding(true);
     }
 
-    protected MockMvc mockMvc;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Autowired(required = false)
-    private JpaUtil jpaUtil;
-
     @Autowired
     protected UserService userService;
 
-    @Autowired
-    protected MealService mealService;
+    protected MockMvc mockMvc;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -59,6 +49,12 @@ abstract public class AbstractControllerTest {
                 .addFilter(CHARACTER_ENCODING_FILTER)
                 .build();
     }
+
+    @Autowired(required = false)
+    private JpaUtil jpaUtil;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @BeforeEach
     void setUp() {

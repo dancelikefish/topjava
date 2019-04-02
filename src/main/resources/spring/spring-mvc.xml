@@ -7,24 +7,7 @@
 
     <bean class="ru.javawebinar.topjava.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <!--DateTime formatters-->
-    <bean name="dateFormatter" class="ru.javawebinar.topjava.util.LocalDateFormatter">
-        <constructor-arg name="pattern" value="yyyy-MM-dd"/>
-    </bean>
-    <bean name="timeFormatter" class="ru.javawebinar.topjava.util.LocalTimeFormatter">
-        <constructor-arg name="pattern" value="HH:mm"/>
-    </bean>
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="registerDefaultFormatters" value="false" />
-        <property name="formatters">
-            <set>
-                <ref bean="dateFormatter"/>
-                <ref bean="timeFormatter"/>
-            </set>
-        </property>
-    </bean>
-
-    <mvc:annotation-driven>
+    <mvc:annotation-driven conversion-service="conversionService">
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper" ref="objectMapper"/>
@@ -48,6 +31,21 @@
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           p:prefix="/WEB-INF/jsp/"
           p:suffix=".jsp"/>
+
+    <!--DateTime formatters-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="registerDefaultFormatters" value="false" />
+        <property name="formatters">
+            <set>
+                <bean name="dateFormatter" class="ru.javawebinar.topjava.util.formatters.LocalDateFormatter">
+                    <constructor-arg name="pattern" value="yyyy-MM-dd"/>
+                </bean>
+                <bean name="timeFormatter" class="ru.javawebinar.topjava.util.formatters.LocalTimeFormatter">
+                    <constructor-arg name="pattern" value="HH:mm"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
 
     <!--
         <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"

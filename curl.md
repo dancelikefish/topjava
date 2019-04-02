@@ -1,5 +1,5 @@
 #Curl commands for this project:
-
+####MEALS:
 * get all meals
 
 curl -X GET \
@@ -39,3 +39,51 @@ curl -X GET \
   http://localhost:8080/topjava/rest/meals/100003 \
   -H 'Content-Type: application/json' \
   -H 'cache-control: no-cache'
+  -----------
+  ###USERS:
+  
+  * get all users
+ 
+ curl -X GET \
+   http://localhost:8080/topjava/rest/admin/users \
+   -H 'Content-Type: application/json' \
+   -H 'cache-control: no-cache' 
+   
+-----------
+  * get user
+  
+  curl -X GET \
+    http://localhost:8080/topjava/rest/admin/users/100000 \
+    -H 'Content-Type: application/json' \
+    -H 'cache-control: no-cache'
+------------
+* get user by email
+
+curl -X GET \
+  'http://localhost:8080/topjava/rest/admin/users/by?email=user@yandex.ru' \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache'   
+  ----------
+  * delete user
+  
+  curl -X DELETE \
+    http://localhost:8080/topjava/rest/admin/users/100000 \
+    -H 'Content-Type: application/json' \
+    -H 'cache-control: no-cache'
+   ----------
+* update user
+
+curl -X PUT \
+  http://localhost:8080/topjava/rest/admin/users/100001 \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache' \
+  -d '{"id":"100001","email":"user@gmail.com","name":"newUser","enabled":true,"caloriesPerDay":2500,"password":"newpassword"}'    
+ ------------
+ * add new user
+ 
+ curl -X POST \
+   http://localhost:8080/topjava/rest/admin/users \
+   -H 'Content-Type: application/json' \
+   -H 'cache-control: no-cache' \
+   -d '{"id":"null","email":"newuser@gmail.com","name":"newUser","enabled":true,"caloriesPerDay":2500,"password":"newpassword"}'
+
