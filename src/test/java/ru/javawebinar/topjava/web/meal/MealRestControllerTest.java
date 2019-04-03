@@ -100,10 +100,8 @@ class MealRestControllerTest extends AbstractControllerTest {
     void testFilterWithNull() throws Exception {
         mockMvc.perform(post(REST_URL + "filter")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("startDate", "")
-                .param("startTime", "")
-                .param("endDate", "")
-                .param("endTime", ""))
+                .param("startDate", "2011-05-01")
+                .param("endDate", "2018-01-01"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
