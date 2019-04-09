@@ -1,7 +1,8 @@
 // $(document).ready(function () {
+let ajaxUrl = "ajax/admin/users/";
 $(function () {
     makeEditable({
-            ajaxUrl: "ajax/admin/users/",
+            ajaxUrl: ajaxUrl,
             datatableApi: $("#datatable").DataTable({
                 "paging": false,
                 "info": true,
@@ -40,3 +41,26 @@ $(function () {
         }
     );
 });
+
+function changeActivity(id) {
+    let checkBox = $("#activityCheckbox");
+    if (checkBox.is(":checked")) {
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl + id,
+            data: {strID:id, strState:"0"},
+        }).done(function () {
+            updateTable();
+            successNoty("Succeed");
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl + id,
+            data: {strID:id, strState:"1"},
+        }).done(function () {
+            updateTable();
+            successNoty("Succeed");
+        });
+    }
+}
