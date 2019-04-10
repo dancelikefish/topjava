@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.service.AbstractJpaUserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -24,5 +25,13 @@ class DataJpaUserServiceTest extends AbstractJpaUserServiceTest {
     void testGetWithMealsNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
                 service.getWithMeals(1));
+    }
+
+    @Test
+    void testSetActivity() throws Exception {
+        boolean enabled = service.get(ADMIN_ID).isEnabled();
+        assertTrue(enabled);
+        service.setActivity(ADMIN_ID, false);
+        assertTrue(enabled != service.get(ADMIN_ID).isEnabled());
     }
 }

@@ -41,8 +41,7 @@ function filterTable() {
         type: "GET",
         url: ajaxUrl + "filter",
         data: $('#filter').serialize(),
-    }).done(function (data) {
-        context.datatableApi.clear().rows.add(data).draw()});
+    }).done(updateTableWithData(data));
 }
 
 function cancelFilter() {
@@ -50,6 +49,5 @@ function cancelFilter() {
         $.ajax({
             type: "GET",
             url: ajaxUrl,
-        }).done(function (data) {
-            context.datatableApi.clear().rows.add(data).draw()});
+        }).done(updateTableWithData(data));
 }

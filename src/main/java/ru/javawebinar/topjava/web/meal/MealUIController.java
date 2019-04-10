@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("ajax/meals")
-public class MealAjaxController extends AbstractMealController {
+public class MealUIController extends AbstractMealController {
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

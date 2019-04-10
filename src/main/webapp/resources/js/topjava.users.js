@@ -48,19 +48,18 @@ function changeActivity(id) {
         $.ajax({
             type: "POST",
             url: ajaxUrl + id,
-            data: {strID:id, strState:"0"},
-        }).done(function () {
-            updateTable();
-            successNoty("Succeed");
-        });
+            data: {id:id,enableState:true},
+        }).done(doIfDone());
     } else {
         $.ajax({
             type: "POST",
             url: ajaxUrl + id,
-            data: {strID:id, strState:"1"},
-        }).done(function () {
-            updateTable();
-            successNoty("Succeed");
-        });
+            data: {id:id,enableState:false},
+        }).done(doIfDone());
     }
+}
+
+function doIfDone() {
+    updateTable();
+    successNoty("Succeed");
 }

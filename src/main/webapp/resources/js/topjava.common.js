@@ -5,7 +5,7 @@ function makeEditable(ctx) {
     form = $('#detailsForm');
     $(".delete").click(function () {
         if (confirm('Are you sure?')) {
-            deleteRow($(this).attr("id"));
+            deleteRow($(this).closest('tr').attr('id'));
         }
     });
 
@@ -15,7 +15,6 @@ function makeEditable(ctx) {
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
-    return context.ajaxUrl;
 }
 
 function add() {
@@ -77,4 +76,9 @@ function failNoty(jqXHR) {
         type: "error",
         layout: "bottomRight"
     }).show();
+}
+
+function updateTableWithData(data) {
+    context.datatableApi.clear().rows.add(data).draw();
+    successNoty("Succeed");
 }
