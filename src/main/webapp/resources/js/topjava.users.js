@@ -43,8 +43,8 @@ $(function () {
 });
 
 function changeActivity(id) {
-    let checkBox = $("#activityCheckbox");
-    if (checkBox.is(":checked")) {
+    let checkBox = "checkbox" + id;
+    if (document.getElementById(checkBox).checked) {
         $.ajax({
             type: "POST",
             url: ajaxUrl + id,
