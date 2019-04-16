@@ -23,7 +23,7 @@ tr[data-mealExcess="true"] {
     color: red;
 }
 
-td[isUser-active="false"] {
+tr[isUser-active="false"] {
     background-color: lightcoral;
 }
 

@@ -77,8 +77,3 @@ function failNoty(jqXHR) {
         layout: "bottomRight"
     }).show();
 }
-
-function updateTableWithData(data) {
-    context.datatableApi.clear().rows.add(data).draw();
-    successNoty("Succeed");
-}
