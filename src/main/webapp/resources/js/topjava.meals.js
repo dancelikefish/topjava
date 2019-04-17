@@ -61,7 +61,7 @@ $(function () {
             }
         }),
         updateTable: function () {
-            $.get(mealAjaxUrl, updateTableByData);
+            updateFilteredTable();
         }
     })
 });
