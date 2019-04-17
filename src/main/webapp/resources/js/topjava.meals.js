@@ -1,31 +1,37 @@
-const ajaxMealUrl = "ajax/profile/meals/";
+const mealAjaxUrl = "ajax/profile/meals/";
 
 function updateFilteredTable() {
     $.ajax({
         type: "GET",
-        url: ajaxMealUrl + "filter",
+        url: mealAjaxUrl + "filter",
         data: $("#filter").serialize()
     }).done(updateTableByData);
 }
 
 function clearFilter() {
     $("#filter")[0].reset();
-    $.get(ajaxMealUrl, updateTableByData);
+    $.get(mealAjaxUrl, updateTableByData);
 }
 
 $(function () {
     makeEditable({
-        ajaxUrl: ajaxMealUrl,
+        ajaxUrl: mealAjaxUrl,
         datatableApi: $("#datatable").DataTable({
             "ajax": {
-                "url": ajaxMealUrl,
+                "url": mealAjaxUrl,
                 "dataSrc": ""
             },
             "paging": false,
             "info": true,
             "columns": [
                 {
-                    "data": "dateTime"
+                    "data": "dateTime",
+                    render: function (date, type, row) {
+                        if (type === "display") {
+                            return date.replace("T", " ");
+                        }
+                        return date;
+                    }
                 },
                 {
                     "data": "description"
@@ -55,7 +61,7 @@ $(function () {
             }
         }),
         updateTable: function () {
-            updateFilteredTable;
+            $.get(mealAjaxUrl, updateTableByData);
         }
     })
 });
